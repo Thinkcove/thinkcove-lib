@@ -1,25 +1,37 @@
 import bunyan from "bunyan";
 import bunyanFormat from "bunyan-format";
+import { DEFAULT_LOGGER_MODE } from "../constant/loggerConstant";
 
-// Infer the type of the bunyan-format options
+// --- Type Inference Section ---
+
+// Logger instance returned by bunyan.createLogger
+type BunyanLogger = ReturnType<typeof bunyan.createLogger>;
+
+// Options accepted by bunyan.createLogger
+type BunyanLoggerOptions = Parameters<typeof bunyan.createLogger>[0];
+
+// Options accepted by bunyan-format
 type BunyanFormatOptions = Parameters<typeof bunyanFormat>[0];
 
-// Extract only valid output modes ("short", "bunyan", etc.)
-type BunyanOutputMode = NonNullable<BunyanFormatOptions["outputMode"]>;
-
-interface LoggerProps {
-  name: string;
-  logLevel: bunyan.LogLevelString;
-  outputMode?: BunyanOutputMode;
+/**
+ * Configuration options for creating a formatted Bunyan logger.
+ * Extends Bunyan's LoggerOptions except for `stream` and `streams`,
+ * which are controlled internally through bunyan-format.
+ */
+export interface LoggerProps
+  extends Omit<BunyanLoggerOptions, "stream" | "streams"> {
+  /**
+   * Optional bunyan-format configuration.
+   * You can customize log format (e.g., 'short', 'long', etc.)
+   */
+  formatOptions?: BunyanFormatOptions;
 }
 
 /**
- * Creates a Bunyan logger with formatted output.
+ * Creates a Bunyan logger instance with human-readable formatting.
  *
- * @param name - Name of the logger (usually your app or service name)
- * @param logLevel - Minimum log level to output (e.g., "info", "debug", "error")
- * @param outputMode - Format of the logs (e.g., "short", "long", "json", "bunyan")
- * @returns A configured Bunyan logger instance
+ * @param props - Bunyan logger configuration options and optional formatting.
+ * @returns A configured and formatted Bunyan logger instance.
  *
  * @example
  * ```ts
@@ -27,27 +39,36 @@ interface LoggerProps {
  *
  * const logger = createLogger({
  *   name: 'my-service',
- *   logLevel: 'info',
- *   outputMode: 'short', // optional (default is "bunyan")
+ *   level: 'info',
+ *   formatOptions: {
+ *     outputMode: 'short',
+ *     levelInString: true,
+ *     color: true
+ *   }
  * });
  *
- * logger.info('Service started successfully');
+ * logger.info('Server started');
  * ```
  */
 export const createLogger = ({
   name,
-  logLevel,
-  outputMode = "bunyan",
-}: LoggerProps) => {
-  const loggerFormat = bunyanFormat({
-    outputMode,
+  level,
+  serializers = bunyan.stdSerializers,
+  src,
+  formatOptions = {
+    outputMode: DEFAULT_LOGGER_MODE,
     levelInString: true,
-  });
+  },
+  ...rest
+}: LoggerProps): BunyanLogger => {
+  const loggerFormat = bunyanFormat(formatOptions);
 
   return bunyan.createLogger({
     name,
+    level,
+    serializers,
     stream: loggerFormat,
-    level: logLevel,
-    serializers: bunyan.stdSerializers,
+    src,
+    ...rest,
   });
 };
