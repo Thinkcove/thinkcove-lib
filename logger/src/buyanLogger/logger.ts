@@ -15,6 +15,24 @@ interface LoggerProps {
 
 /**
  * Creates a Bunyan logger with formatted output.
+ *
+ * @param name - Name of the logger (usually your app or service name)
+ * @param logLevel - Minimum log level to output (e.g., "info", "debug", "error")
+ * @param outputMode - Format of the logs (e.g., "short", "long", "json", "bunyan")
+ * @returns A configured Bunyan logger instance
+ *
+ * @example
+ * ```ts
+ * import { createLogger } from 'your-npm-package';
+ *
+ * const logger = createLogger({
+ *   name: 'my-service',
+ *   logLevel: 'info',
+ *   outputMode: 'short', // optional (default is "bunyan")
+ * });
+ *
+ * logger.info('Service started successfully');
+ * ```
  */
 export const createLogger = ({
   name,
