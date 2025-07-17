@@ -5,3 +5,4 @@ lib/
 .env.*
 package-lock.json
 *.sh
+Jenkinsfile
