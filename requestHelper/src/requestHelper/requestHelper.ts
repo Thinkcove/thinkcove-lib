@@ -1,6 +1,13 @@
-// Exporting the RequestHelper class for external usage
+/**
+ * Helper class to simplify access to request properties in a Hapi.js application.
+ *
+ * @param request - Hapi Request object; must conform to @hapi/hapi Request type
+ *
+ * Example usage:
+ * const helper = new RequestHelper(request); // request is of type Hapi.Request
+ */
 export class RequestHelper {
-  // Internal property to store the request object (e.g., Hapi.js request)
+  // Internal property to store the request object (e.g., Hapi Request type)
   private request: any;
 
   // Constructor receives and stores the request object
