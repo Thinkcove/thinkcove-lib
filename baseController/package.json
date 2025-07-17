@@ -1,0 +1,17 @@
+{
+  "name": "@thinkcove-lib/basecontroller",
+  "version": "1.0.0",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@hapi/boom": "^10.0.1",
+    "http-status-codes": "^2.3.0"
+  }
+}
