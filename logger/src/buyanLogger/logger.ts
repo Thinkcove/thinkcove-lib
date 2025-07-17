@@ -1,8 +1,11 @@
-import bunyan from "bunyan";
+import bunyan, { LogLevelString } from "bunyan";
 import bunyanFormat from "bunyan-format";
-import { DEFAULT_LOGGER_MODE } from "../constant/loggerConstant";
+import {
+  DEFAULT_LOGGER_MODE,
+  DEFAULT_LOGGER_OUTPUT_MODE,
+} from "../constant/loggerConstant";
 
-// --- Type Inference Section ---
+// --- Inferred Types ---
 
 // Logger instance returned by bunyan.createLogger
 type BunyanLogger = ReturnType<typeof bunyan.createLogger>;
@@ -16,13 +19,17 @@ type BunyanFormatOptions = Parameters<typeof bunyanFormat>[0];
 /**
  * Configuration options for creating a formatted Bunyan logger.
  * Extends Bunyan's LoggerOptions except for `stream` and `streams`,
- * which are controlled internally through bunyan-format.
+ * which are handled internally by bunyan-format.
  */
 export interface LoggerProps
-  extends Omit<BunyanLoggerOptions, "stream" | "streams"> {
+  extends Omit<BunyanLoggerOptions, "stream" | "streams" | "level"> {
   /**
-   * Optional bunyan-format configuration.
-   * You can customize log format (e.g., 'short', 'long', etc.)
+   * Minimum log level to output ("info", "debug", etc.)
+   */
+  level?: LogLevelString;
+
+  /**
+   * Optional bunyan-format config (outputMode, color, etc.)
    */
   formatOptions?: BunyanFormatOptions;
 }
@@ -30,8 +37,8 @@ export interface LoggerProps
 /**
  * Creates a Bunyan logger instance with human-readable formatting.
  *
- * @param props - Bunyan logger configuration options and optional formatting.
- * @returns A configured and formatted Bunyan logger instance.
+ * @param props - Bunyan logger config with optional bunyan-format settings.
+ * @returns A configured and formatted Bunyan logger.
  *
  * @example
  * ```ts
@@ -47,16 +54,16 @@ export interface LoggerProps
  *   }
  * });
  *
- * logger.info('Server started');
+ * logger.info('Service started');
  * ```
  */
 export const createLogger = ({
   name,
-  level,
+  level = DEFAULT_LOGGER_MODE,
   serializers = bunyan.stdSerializers,
   src,
   formatOptions = {
-    outputMode: DEFAULT_LOGGER_MODE,
+    outputMode: DEFAULT_LOGGER_OUTPUT_MODE,
     levelInString: true,
   },
   ...rest
