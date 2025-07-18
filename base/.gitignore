@@ -5,3 +5,5 @@ lib/
 .env.*
 package-lock.json
 *.sh
+# Logs
+*.log
