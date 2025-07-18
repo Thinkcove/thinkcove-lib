@@ -1,9 +1,7 @@
 import * as Boom from "@hapi/boom";
 import { StatusCodes } from "http-status-codes";
 import ErrorMessages from "../errorController/errorMessage";
-
-// TODO: Uncomment logger when logger is available - Get form npm package
-// import logger from './logger';
+import { createLogger } from "../logger/logger";
 
 const setDataInError = (err: Boom.Boom, data?: any): Boom.Boom => {
   err.output.payload.details = data || err.data;
@@ -56,8 +54,7 @@ export class BaseController {
   }
 
   replyError(ex: any, errorMessages: ErrorMessages = new ErrorMessages()): Boom.Boom {
-    // TODO: Uncomment logger when logger is available
-    // logger.error(ex);
+    createLogger().error(ex);
     errorMessages.addErrorMessage(
       StatusCodes.INTERNAL_SERVER_ERROR, // Use StatusCodes instead
       `${ex}`

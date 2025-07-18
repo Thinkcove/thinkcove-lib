@@ -42,11 +42,7 @@ export class RequestHelper {
 
   // Extracts and returns the raw query string (e.g., "key1=value1&key2=value2")
   getQueryString(): string {
-    if (
-      this.request.url &&
-      this.request.url.search &&
-      this.request.url.search !== ""
-    ) {
+    if (this.request.url && this.request.url.search && this.request.url.search !== "") {
       // Remove the leading "?" from the query string
       return this.request.url.search.substring(1);
     }
