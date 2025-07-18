@@ -1,5 +1,5 @@
 export { BaseController } from "./baseController/baseController";
-export { Performance } from "./performance/performance";
+export { performance } from "./performance/performance";
 export { RequestHelper } from "./requestHelper/requestHelper";
 export { Utils } from "./utils/utils";
 export { createLogger } from "./logger/logger";

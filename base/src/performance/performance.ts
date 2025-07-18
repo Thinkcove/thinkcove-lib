@@ -1,24 +1,24 @@
-import { performance } from "perf_hooks";
 import { createLogger } from "../logger/logger";
 
-export class Performance {
-  private service: string;
-  private start: number;
+/**
+ * Creates a performance tracker for logging "start" and "end" events.
+ *
+ * @param service - A label identifying the service or operation being tracked.
+ * @returns An object with a `stop()` method to log the end of the operation.
+ *
+ * Usage:
+ * const perf = performanceTracker("user-auth");
+ * // ... perform some actions
+ * perf.stop(); // logs the "end" event
+ */
+export const performance = (service: string) => {
+  // Log the start of the operation
+  createLogger().info({ service, event: "start" });
 
-  constructor(service: string) {
-    this.service = service;
-    this.start = performance.now();
-    createLogger().debug({ service: this.service, event: "start", start: this.start });
-  }
-
-  stop(): void {
-    const end = performance.now();
-    createLogger().debug({
-      service: this.service,
-      event: "end",
-      duration: end - this.start,
-      start: this.start,
-      end
-    });
-  }
-}
+  return {
+    // Call this to log the end of the operation
+    stop: () => {
+      createLogger().info({ service, event: "end" });
+    }
+  };
+};
