@@ -12,6 +12,10 @@
   "description": "",
   "dependencies": {
     "@hapi/boom": "^10.0.1",
-    "http-status-codes": "^2.3.0"
+    "http-status-codes": "^2.3.0",
+    "perf_hooks": "^0.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.14"
   }
 }
