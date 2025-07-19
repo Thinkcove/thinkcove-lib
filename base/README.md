@@ -4,9 +4,11 @@ Open Source Libraries from Thinkcove
 # @thinkcove-lib/base
 A lightweight TypeScript utility library for building Hapi-style APIs, providing:
 - **BaseController**: standardized JSON responses and centralized error handling  
+- **sendResponse**: standardized JSON success responses  
+- **replyError**: centralized Boom-based error handling  
 - **ErrorMessages**: customizable HTTP error message manager  
 - **Logger**: Winston-based logger factory  
-- **Performance**, **RequestHelper**, **Utils** modules for common tasks  
+- **Performance**, **RequestHelper**, **Utils** modules for common tasks 
 
 ## Installation
 # From npm
