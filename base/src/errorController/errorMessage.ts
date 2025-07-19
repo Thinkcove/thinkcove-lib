@@ -3,30 +3,40 @@ export interface ErrorMessage {
   details?: any;
 }
 
-class ErrorMessages {
-  private errorMessagesMap: Map<number, ErrorMessage>;
+type ErrorMessagesMap = Record<number, ErrorMessage>;
 
-  constructor(data: { status: number; message: string }[] = []) {
-    this.errorMessagesMap = new Map(
-      data
-        .filter((item) => item && item.status && item.message)
-        .map((item) => [item.status, { message: item.message }] as [number, ErrorMessage])
-    );
-  }
+const createErrorMessages = (initialData: { status: number; message: string }[] = []) => {
+  const errorMessagesMap: ErrorMessagesMap = {};
 
-  getErrorMessage(status: number): ErrorMessage | undefined {
-    return this.errorMessagesMap.get(status);
-  }
-
-  addErrorMessage(status: number, message: string, details?: any): void {
-    if (this.getErrorMessage(status) === undefined) {
-      const errorData: ErrorMessage = { message };
-      if (details) {
-        errorData.details = details;
-      }
-      this.errorMessagesMap.set(status, errorData);
+  // Initialize map with valid entries
+  initialData.forEach(({ status, message }) => {
+    if (status && message) {
+      errorMessagesMap[status] = { message };
     }
-  }
-}
+  });
 
-export default ErrorMessages;
+  return {
+    /**
+     * Retrieves the error message for a given status code.
+     *
+     * @param {number} status - HTTP status code.
+     * @returns {ErrorMessage | undefined} The error message, if found.
+     */
+    getErrorMessage: (status: number): ErrorMessage | undefined => errorMessagesMap[status],
+
+    /**
+     * Adds a new error message for a specific status code, if not already present.
+     *
+     * @param {number} status - HTTP status code.
+     * @param {string} message - Message to store.
+     * @param {any} [details] - Optional detailed info.
+     */
+    addErrorMessage: (status: number, message: string, details?: any): void => {
+      if (!errorMessagesMap[status]) {
+        errorMessagesMap[status] = { message, ...(details && { details }) };
+      }
+    }
+  };
+};
+
+export default createErrorMessages;
