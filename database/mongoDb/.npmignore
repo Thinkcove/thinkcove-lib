@@ -1,0 +1,8 @@
+src/
+tsconfig.json
+.eslintrc
+.prettierrc
+*.log
+*.md
+*.test.*
+*.spec.*
