@@ -1,13 +1,11 @@
 import winston from "winston";
+import { DEFAULT_LEVEL, DEFAULT_COMBINED_LOG_PATH, DEFAULT_LOG_PATH } from "./constant";
 
 export interface LoggerOptions extends Partial<winston.LoggerOptions> {
   enableConsole?: boolean;
   errorLogPath?: string;
   combinedLogPath?: string;
 }
-const DEFAULT_LEVEL = "info";
-const DEFAULT_LOG_PATH = "logs/error.log";
-const DEFAULT_COMBINED_LOG_PATH = "logs/combined.log";
 /**
  * Creates a Winston logger with optional console and file logging.
  *
@@ -68,6 +66,9 @@ export const createLogger = ({
   const logFormat =
     format ??
     winston.format.combine(
+      winston.format.splat(),
+      winston.format.json(),
+      winston.format.colorize(),
       winston.format.timestamp(),
       winston.format.printf(({ timestamp, level, message, ...meta }) => {
         const msg = typeof message === "object" ? JSON.stringify(message) : String(message);
