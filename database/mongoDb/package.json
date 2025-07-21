@@ -1,5 +1,5 @@
 {
-  "name": "@thinkcove/dbconnect",
+  "name": "@thinkcove/mongo",
   "version": "1.0.0",
   "description": "",
   "main": "lib/index.js",
