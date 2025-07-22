@@ -32,7 +32,7 @@ import {
  * const user = await User.create({ name: 'Alice', email: 'alice@example.com', password: 'secure' });
  * ```
  */
-export const createModel = <
+export const createMongoModel = <
   TSchema extends SchemaDefinition<SchemaDefinitionType<any>>,
   TDoc = SchemaDefinitionType<TSchema>,
   TModelName extends string = string
