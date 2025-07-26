@@ -81,7 +81,7 @@ export const createLogger = ({
   );
 
   const consoleFormat = winston.format.combine(
-    winston.format.timestamp({ format: timeFormat }), 
+    winston.format.timestamp({ format: timeFormat }),
     winston.format.colorize({ all: true }),
     formatter
   );
@@ -95,29 +95,25 @@ export const createLogger = ({
           ...(enableConsole
             ? [
                 new winston.transports.Console({
-                  format: consoleFormat,
-                }),
+                  format: consoleFormat
+                })
               ]
             : []),
           new winston.transports.File({
             filename: errorLogPath,
             level: "error",
-            format: fileFormat,
+            format: fileFormat
           }),
           new winston.transports.File({
             filename: combinedLogPath,
-            format: fileFormat,
-          }),
+            format: fileFormat
+          })
         ];
 
   return winston.createLogger({
     level,
+    format: format ?? baseFormat,
     transports: resolvedTransports,
-    ...rest,
+    ...rest
   });
 };
-
-
-
-
-
