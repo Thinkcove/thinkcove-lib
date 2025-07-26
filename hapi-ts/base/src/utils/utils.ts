@@ -5,23 +5,26 @@ export class Utils {
   /**
    * Creates a UUID.
    *
-   * @return {string} A UUID V4 string
+   * @return {string} A UUID V4 string.
    */
   static uuid = (): string => uuidv4();
 
   /**
-   * Generates a random string of specified length.
+   * Hashes a plain text string using bcrypt.
    *
-   * @param {number} length - The length of the random string to generate.
-   * @return {string} A random string of the specified length.
+   * @param {string} text - The plain text string to hash.
+   * @param {string | number} saltOrRounds - A salt string or the number of salt rounds (e.g., 10).
+   * @return {Promise<string>} The hashed string.
    */
-  static hash = async (text: string, secret: string): Promise<string> => bcrypt.hash(text, secret);
+  static hash = async (text: string, saltOrRounds: string | number): Promise<string> =>
+    bcrypt.hash(text, saltOrRounds);
+
   /**
    * Compares a plain text string with a hashed string.
    *
    * @param {string} text - The plain text string to compare.
    * @param {string} hashedText - The hashed string to compare against.
-   * @return {Promise<boolean>} A promise that resolves to true if the strings match, false otherwise.
+   * @return {Promise<boolean>} True if the strings match, false otherwise.
    */
   static compare = async (text: string, hashedText: string): Promise<boolean> =>
     bcrypt.compare(text, hashedText);
