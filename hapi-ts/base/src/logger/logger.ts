@@ -5,6 +5,7 @@ export interface LoggerOptions extends Partial<winston.LoggerOptions> {
   enableConsole?: boolean;
   errorLogPath?: string;
   combinedLogPath?: string;
+  use12HourFormat?: boolean;
 }
 /**
  * Creates a Winston logger with optional console and file logging.
@@ -61,37 +62,62 @@ export const createLogger = ({
   combinedLogPath = DEFAULT_COMBINED_LOG_PATH,
   format,
   transports,
+  use12HourFormat = false,
   ...rest
 }: LoggerOptions = {}) => {
-  const logFormat =
-    format ??
-    winston.format.combine(
-      winston.format.splat(),
-      winston.format.json(),
-      winston.format.colorize(),
-      winston.format.timestamp(),
-      winston.format.printf(({ timestamp, level, message, ...meta }) => {
-        const msg = typeof message === "object" ? JSON.stringify(message) : String(message);
+  const timeFormat = use12HourFormat ? "YYYY-MM-DD hh:mm:ss A" : "YYYY-MM-DD HH:mm:ss";
 
-        const metaStr = Object.keys(meta).length ? ` ${JSON.stringify(meta)}` : "";
+  // Format message with timestamp, level, message, and optional metadata
+  const formatter = winston.format.printf(({ timestamp, level, message, ...meta }) => {
+    const msg = typeof message === "object" ? JSON.stringify(message) : String(message);
+    const metaStr = Object.keys(meta).length ? ` ${JSON.stringify(meta)}` : "";
+    return `[${timestamp}] ${level}: ${msg}${metaStr}`;
+  });
 
-        return `[${timestamp}] ${level.toUpperCase()}: ${msg}${metaStr}`;
-      })
-    );
+  const baseFormat = winston.format.combine(
+    winston.format.timestamp({ format: timeFormat }),
+    winston.format.errors({ stack: true }),
+    winston.format.splat()
+  );
 
-  const resolvedTransports =
+  const consoleFormat = winston.format.combine(
+    winston.format.timestamp({ format: timeFormat }), 
+    winston.format.colorize({ all: true }),
+    formatter
+  );
+
+  const fileFormat = winston.format.combine(baseFormat, formatter);
+
+  const resolvedTransports: winston.transport[] =
     Array.isArray(transports) && transports.length > 0
       ? transports
       : [
-          ...(enableConsole ? [new winston.transports.Console()] : []),
-          new winston.transports.File({ filename: errorLogPath, level: "error" }),
-          new winston.transports.File({ filename: combinedLogPath })
+          ...(enableConsole
+            ? [
+                new winston.transports.Console({
+                  format: consoleFormat,
+                }),
+              ]
+            : []),
+          new winston.transports.File({
+            filename: errorLogPath,
+            level: "error",
+            format: fileFormat,
+          }),
+          new winston.transports.File({
+            filename: combinedLogPath,
+            format: fileFormat,
+          }),
         ];
 
   return winston.createLogger({
     level,
-    format: logFormat,
     transports: resolvedTransports,
-    ...rest
+    ...rest,
   });
 };
+
+
+
+
+
