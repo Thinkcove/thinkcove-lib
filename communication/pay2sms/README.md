@@ -1,7 +1,7 @@
 
 # 📲 @thinkcove/communication
 
-A TypeScript utility to send SMS messages using [Pay2SMS](https://www.pay2sms.in/). Built for backend services, this library supports templated messages, custom Axios options, and integrates seamlessly with your server applications using Axios and Mustache.
+A TypeScript utility to send SMS messages using [Pay2SMS](https://pay4sms.in/). Built for backend services, this library supports templated messages, custom Axios options, and integrates seamlessly with your server applications using Axios and Mustache.
 
 ---
 
@@ -35,7 +35,7 @@ import { sendPay2sms } from "@thinkcove/communication";
 
 ```ts
 const smsConfig = {
-  smsUrl: "https://www.pay2sms.in/sendsms", // Pay2SMS API endpoint
+  smsUrl: "https://pay4sms.in/sendsms/", // Pay2SMS API endpoint
   senderId: "ABCDEF",                       // Registered sender ID
   creditType: "1",                          // "1" = Transactional, "2" = Promotional
   communicationToken: "YOUR_API_TOKEN",    // Token from Pay2SMS
