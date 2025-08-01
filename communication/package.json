@@ -1,7 +1,7 @@
 {
   "name": "@thinkcove/communication",
   "version": "1.0.0",
-  "description": "",
+  "description": "Reusable communication module for internal HTTP requests and templating.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
@@ -14,8 +14,20 @@
     "format": "prettier --write \"src/**/*.ts\"",
     "format:check": "prettier --check 'src/**/*.{js,jsx,mjs,cjs,ts,tsx,json}'"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "communication",
+    "http",
+    "templating",
+    "mustache",
+    "axios",
+    "typescript"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Thinkcove/thinkcove-lib.git",
+    "directory": "communication/pay2sms"
+  },
+  "author": "Thinkcove Technologies",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
