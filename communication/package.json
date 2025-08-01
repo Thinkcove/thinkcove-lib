@@ -1,6 +1,6 @@
 {
   "name": "@thinkcove-lib/communication",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Reusable communication module for internal HTTP requests and templating.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
