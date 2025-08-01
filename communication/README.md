@@ -184,7 +184,7 @@ dotenv.config();
 
 ## 📎 Useful Links
 
-- 🔗 [Pay2SMS](http://www.pay2sms.in/)
+- 🔗 [Pay2SMS](http://pay4sms.in/)
 
 ---
 
