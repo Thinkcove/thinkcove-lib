@@ -22,11 +22,6 @@
     "axios",
     "typescript"
   ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Thinkcove/thinkcove-lib.git",
-    "directory": "thinkcove-lib/communication"
-  },
   "author": "Thinkcove Technologies",
   "license": "ISC",
   "type": "commonjs",
