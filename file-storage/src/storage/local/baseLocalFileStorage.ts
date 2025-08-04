@@ -36,10 +36,12 @@ export class BaseLocalStorage implements StorageBackend {
 
   protected async ensureDirForFile(filePath: string) {
     const dir = path.dirname(filePath);
+    // create a folder initially once hit ensureDirForFile function, if the folder is not in specified path
     await fs.mkdir(dir, { recursive: true });
   }
 
-  protected async assertFileExists(filePath: string) {
+  // check file exists
+  protected async fileExists(filePath: string) {
     try {
       await fs.access(filePath);
     } catch {
@@ -63,16 +65,19 @@ export class BaseLocalStorage implements StorageBackend {
     size: number;
   }> {
     const filePath = this.resolveFilePath(destinationPath);
-    await this.assertFileExists(filePath);
+    await this.fileExists(filePath);
 
     const buffer = await fs.readFile(filePath);
     const stats = await fs.stat(filePath);
-    const { mimeType } = await detectMimeTypeAndExtension(buffer);
+    const size = stats?.size ?? null;
+    
+    const { mimeType, extension } = await detectMimeTypeAndExtension(buffer);
 
     const metaPath = this.getMetaFilePath(filePath);
     let metadata: FileMetadata = {
       mimeType,
-      size: stats.size,
+      extension,
+      size,
       lastModified: stats.mtime.toISOString()
     };
 
@@ -92,7 +97,7 @@ export class BaseLocalStorage implements StorageBackend {
       buffer,
       metadata,
       mimeType,
-      size: stats.size
+      size
     };
   }
 
